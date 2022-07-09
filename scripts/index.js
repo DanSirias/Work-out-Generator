@@ -61,6 +61,8 @@ let editPost = (e) => {
   day.value  = selectedWorkout.children[0].innerHTML;
   workout.value = selectedWorkout.children[1].innerHTML;
   time.value = selectedWorkout.children[2].innerHTML;
+  submit.innerHTML = "Update Now";
+  submit.className = "btn bg-warning";
 
   submit.addEventListener('click', (e) =>{
     confirm("Do you Want to Update?");
@@ -68,7 +70,7 @@ let editPost = (e) => {
   
   selectedWorkout.remove();
   data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
-  //localStorage.setItem('data', JSON.stringify(data));
+  localStorage.setItem('data', JSON.stringify(data));
 
 };
 
