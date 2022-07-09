@@ -70,8 +70,8 @@ let editPost = (e) => {
   
   selectedWorkout.remove();
   data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
-  localStorage.setItem('data', JSON.stringify(data));
-
+  localStorage.getItem('data', JSON.stringify(data[e.parentElement.parentElement.parentElement.parentElement.id]));
+  console.log("My data" + localStorage.getItem('data', JSON.stringify(data[e.parentElement.parentElement.parentElement.parentElement.id]))); 
 };
 
 
