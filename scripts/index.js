@@ -1,12 +1,5 @@
 'use strict'; 
 
-try {
-
-  
-//alert("Howdy");
-//const myName = "daniel";
-//alert(myName);
-
 const day = document.querySelector('#DaysOfWeek');
 const workout = document.querySelector('#workoutType');
 const time = document.querySelector('#timeStart');
@@ -21,57 +14,55 @@ submit.addEventListener('click', (e) => {
     acceptData();
 });
 
-
-let deleteTask = (e) => {
-  e.parentElement.parentElement.parentElement.parentElement.remove();
-  //data.splice(e.parentElement.parentElement.id, 1);
-  //localStorage.setItem("data", JSON.stringify(data));
-
-  console.log(data);
-};
-
-console.log(typeof deleteTask); 
-
 let data = [{}];
 
 let acceptData = () => {
   data.push({
-    day: day.options[day.selectedIndex].value,
+    day: day.options[day.selectedIndex].textContent,
     workout: workout.value,
     time: time.value,
   });
-  localStorage.setItem("data", JSON.stringify(data));
+  localStorage.setItem("data", JSON.stringify(data)); //store the key & value items in localStorage
   createTasks();
 };
 
-
-
-
 let createTasks = () => {
             mon.innerHTML = "";
-            data.map((x, y) => {
+            data.map((obj, i) => {
             return (mon.innerHTML += `
-
-            <tr id="${y}" class="d-flex">
-            <th scope="row"></th>
-            <td class="col-sm-6">${x.workout}</td>
-            <td>${x.time}</td>
-            <td>
-            <span class="options">
-              <a class="btn" type="button" href="#"><i title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
-              <i onClick="deleteTask(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i>
-            </span>
-            </td>
-          </tr>`
+              <tr id="${i}" class="d-flex" style="width: 100%;">
+              <th style="width: 20%;" scope="row">${obj.day}</th>
+              <td style="width: 30%;">${obj.workout}</td>
+              <td style="width: 30%;">${obj.time}</td>
+              <td>
+              <span class="options">
+                <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
+                <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
+              </span>
+              </td>
+            </tr>`
           );
 });
          resetForm();
 };
 
-/* let deletePost = (e) => {
+let deletePost = (e) => {
   e.parentElement.parentElement.parentElement.parentElement.remove();
-}; */
+  console.log(e.parentElement.parentElement.parentElement.parentElement.id);
+  //data.splice(e.parentElement.parentElement.parentElement.parentElement.id, -1);
+  localStorage.removeItem(e.parentElement.parentElement.parentElement.parentElement.id);
+ // console.log(e.parentElement.parentElement.parentElement.parentElement.id); 
+  //e.parentElement.parentElement.parentElement.parentElement.remove();
+};
 
+
+
+let editPost = (e) => {
+  let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
+  day.value  = selectedWorkout.children[0].innerHTML;
+  workout.value = selectedWorkout.children[1].innerHTML;
+  time.value = selectedWorkout.children[2].innerHTML;
+};
 
 
   let resetForm = () => {
@@ -89,13 +80,4 @@ let createTasks = () => {
 
 
 
-let editPost = (e) => {
-  input.value = e.parentElement.previousElementSibling.innerHTML;
-  e.parentElement.parentElement.remove();
-};
-
-
   
-} catch (error) {
-  alert(error); 
-}
