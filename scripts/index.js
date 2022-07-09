@@ -11,22 +11,22 @@ const tues = document.querySelector('#tues');
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
-    postData();
+    acceptData();
 });
 
 let data = [{}];
 
-let postData = () => {
+let acceptData = () => {
   data.push({
     day: day.options[day.selectedIndex].textContent,
     workout: workout.value,
     time: time.value,
   });
   localStorage.setItem("data", JSON.stringify(data)); //store the key & value items in localStorage
-  createData();
+  createTasks();
 };
 
-let createData = () => {
+let createTasks = () => {
             mon.innerHTML = "";
             data.map((obj, i) => {
             return (mon.innerHTML += `
@@ -36,7 +36,7 @@ let createData = () => {
               <td style="width: 30%;">${obj.time}</td>
               <td>
               <span class="options">
-                <a class="btn" type="button" href="#"><i onClick="updateData(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
+                <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
                 <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
               </span>
               </td>
@@ -56,18 +56,19 @@ let deletePost = (e) => {
 
 
 
-let updateData = (e) => {
+let editPost = (e) => {
   let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
   day.value  = selectedWorkout.children[0].innerHTML;
   workout.value = selectedWorkout.children[1].innerHTML;
   time.value = selectedWorkout.children[2].innerHTML;
-  submit.innerHTML = "Update Now";
-  submit.className = "btn bg-warning";
 
-  let dataItem = localStorage.getItem('data', JSON.stringify(data));
-  console.log(dataItem);
-  //selectedWorkout.remove();
-  //data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
+  submit.addEventListener('click', (e) =>{
+    confirm("Do you Want to Update?");
+  });
+  
+  selectedWorkout.remove();
+  data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
+  //localStorage.setItem('data', JSON.stringify(data));
 
 };
 
@@ -81,31 +82,10 @@ let updateData = (e) => {
   (() => {
     data = JSON.parse(localStorage.getItem("data")) || []
     console.log(data);
-    createData();
+    createTasks();
   })();
 
 
-
-  /* 
-  
-  let updateData = (e) => {
-  let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
-  day.value  = selectedWorkout.children[0].innerHTML;
-  workout.value = selectedWorkout.children[1].innerHTML;
-  time.value = selectedWorkout.children[2].innerHTML;
-  submit.innerHTML = "Update Now";
-  submit.className = "btn bg-warning";
-
-  submit.addEventListener('click', (e) =>{
-    confirm("Do you Want to Update?");
-  });
-  
-  selectedWorkout.remove();
-  data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
-  localStorage.setItem('data', JSON.stringify(data));
-};
-
-  */
 
 
   
