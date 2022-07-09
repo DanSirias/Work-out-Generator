@@ -11,22 +11,22 @@ const tues = document.querySelector('#tues');
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
-    acceptData();
+    postData();
 });
 
 let data = [{}];
 
-let acceptData = () => {
+let postData = () => {
   data.push({
     day: day.options[day.selectedIndex].textContent,
     workout: workout.value,
     time: time.value,
   });
   localStorage.setItem("data", JSON.stringify(data)); //store the key & value items in localStorage
-  createTasks();
+  createData();
 };
 
-let createTasks = () => {
+let createData = () => {
             mon.innerHTML = "";
             data.map((obj, i) => {
             return (mon.innerHTML += `
@@ -48,10 +48,9 @@ let createTasks = () => {
 
 let deletePost = (e) => {
   e.parentElement.parentElement.parentElement.parentElement.remove();
-  console.log(e.parentElement.parentElement.parentElement.parentElement.id);
-  //data.splice(e.parentElement.parentElement.parentElement.parentElement.id, -1);
-  localStorage.removeItem(e.parentElement.parentElement.parentElement.parentElement.id);
- // console.log(e.parentElement.parentElement.parentElement.parentElement.id); 
+  data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
+  localStorage.setItem('data', JSON.stringify(data));
+  //console.log(e.parentElement.parentElement.parentElement.parentElement.id); 
   //e.parentElement.parentElement.parentElement.parentElement.remove();
 };
 
@@ -62,19 +61,29 @@ let editPost = (e) => {
   day.value  = selectedWorkout.children[0].innerHTML;
   workout.value = selectedWorkout.children[1].innerHTML;
   time.value = selectedWorkout.children[2].innerHTML;
+  submit.innerHTML = "Update Now";
+  submit.className = "btn bg-warning";
+
+  submit.addEventListener('click', (e) =>{
+    confirm("Do you Want to Update?");
+  });
+  
+  selectedWorkout.remove();
+  data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
+  localStorage.setItem('data', JSON.stringify(data));
 };
 
 
   let resetForm = () => {
     day.value = "";
     workout.value = "";
-    time.value = "";
+    time.value = "";  
   };
 
   (() => {
     data = JSON.parse(localStorage.getItem("data")) || []
     console.log(data);
-    createTasks();
+    createData();
   })();
 
 
