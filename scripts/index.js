@@ -4,6 +4,7 @@ const day = document.querySelector('#DaysOfWeek');
 const workout = document.querySelector('#workoutType');
 const time = document.querySelector('#timeStart');
 const submit = document.querySelector('#submit');
+const reset = document.querySelector('#reset');
 const deleteItem = document.querySelectorAll('.btn-delete'); //arr for all del btns
 const mon = document.querySelector('#mon');
 const tues = document.querySelector('#tues');
@@ -12,6 +13,12 @@ submit.addEventListener('click', (e) => {
 	e.preventDefault();
 	acceptData();
 });
+
+reset.addEventListener('click', (e) => {
+	e.preventDefault();
+	resetForm();
+});
+
 
 document.getElementById('editButton').style.display = "none";
 let data = [{}];
@@ -36,6 +43,7 @@ let acceptData = () => {
 };
 
 let createTasks = () => {
+
 	mon.innerHTML = "";
 	data.map((obj) => {
 		return (mon.innerHTML += `
@@ -51,6 +59,7 @@ let createTasks = () => {
         </td>
       </tr>`);
 	});
+  
 	resetForm();
 };
 
@@ -64,31 +73,32 @@ let deletePost = (e) => {
 
 
 let editPost = (e) => {
-	document.getElementById('submit').style.display = "none";
-	document.getElementById('editButton').style.display = "";
-	document.getElementById('formLabel').textContent = "Edit Your Workout";
+    document.getElementById('submit').style.display = "none";
+    document.getElementById('editButton').style.display = "";
+    document.getElementById('formLabel').textContent = "Edit Your Workout";
 
-	let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
-	let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
-	day.value = selectedWorkout.children[0].innerHTML;
-	workout.value = selectedWorkout.children[1].innerHTML;
-	time.value = selectedWorkout.children[2].innerHTML;
+    let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
+    let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
 
-	document.getElementById("editButton").addEventListener("click", function() {
-		//e.preventDefault();
-		acceptData();
-		let workOutList = JSON.parse(localStorage.getItem("data"));
-		for (let i = 0; i < workOutList.length; i++) {
-			if (workOutList[i].id === itemID) {
-				workOutList.splice(i, 1);
-			}
-		}
+    day.value = selectedWorkout.children[0].innerHTML;
+    workout.value = selectedWorkout.children[1].innerHTML;
+    time.value = selectedWorkout.children[2].innerHTML;
 
-		localStorage.setItem("data", JSON.stringify(workOutList));
-		resetNewForm();
-		resetForm();
-	});
+	  document.getElementById("editButton").addEventListener("click", function() {
+        //e.preventDefault();
+        acceptData();
+        let workOutList = JSON.parse(localStorage.getItem("data"));
+        
+        for (let i = 0; i < workOutList.length; i++) {
+          if (workOutList[i].id === itemID) {
+            workOutList.splice(i, 1);
+          }
+        }
 
+        localStorage.setItem("data", JSON.stringify(workOutList));
+        resetNewForm();
+        resetForm();
+	  });
 };
 
 

@@ -25,6 +25,7 @@
 <div id="mainContainer" class="container-md bg-light">
   <div class="row g-5">
     <div class="col-lg-8 col-xl-7 col-xxl-5 pt-5">
+      <div class="card p-5">
       <h4 id="formLabel" class="mb-3">Build Your Workout</h4>
         <form id="workOutForm" class="needs-validation" novalidate="">
           <div class="input-group mb-3">
@@ -50,15 +51,17 @@
             <!-- Input for Date and Time -->
             <label for="timeStart">Select Time</label>
             <input id="timeStart" class="form-control" type="time" />
-
+            <br>
+            <div class="form-group float-end">
+              <button id="reset"  class="btn btn-outline-secondary" type="submit"><i style="color: grey;"; class="fa fa-ban"></i> Reset</button>
+              <button id="submit" class="btn btn-success" type="submit"><i class="fa fa-plus"></i> Add New</button>
+              <button id="editButton" class="btn btn-warning" type="submit"><i class="fa fa-edit"></i> Update</button>
+            </div>
         </form> 
-        <br> 
-        <div class="form-group float-end">
-
-        <button id="submit" class="btn btn-success" type="submit"><i class="fa fa-plus"></i> Add Workout</button>
-        <button id="editButton" class="btn btn-warning" type="submit"><i class="fa fa-edit"></i> Update</button>
 
         </div>
+ 
+
     </div>
     
     <div class="col-xl-5 col-xxl-7 pt-5">
@@ -85,6 +88,10 @@
             Tuesday
           </div>
           <div class="card-body">
+            <tbody id="tues" style="width: 100%;">
+
+
+            </tbody>
           </div>
         </div>
   
