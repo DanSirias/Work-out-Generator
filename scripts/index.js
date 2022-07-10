@@ -8,6 +8,7 @@ const deleteItem = document.querySelectorAll('.btn-delete'); //arr for all del b
 const mon = document.querySelector('#mon');
 const tues = document.querySelector('#tues');
 
+document.getElementById('editButton').style.display = "none";
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
@@ -16,8 +17,17 @@ submit.addEventListener('click', (e) => {
 
 let data = [{}];
 
+//Generate ID for Items
+let randomID = () => {
+  return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+}
+
+
 let acceptData = () => {
   data.push({
+    id: randomID(), 
     day: day.options[day.selectedIndex].textContent,
     workout: workout.value,
     time: time.value,
@@ -30,7 +40,7 @@ let createTasks = () => {
             mon.innerHTML = "";
             data.map((obj, i) => {
             return (mon.innerHTML += `
-              <tr id="${i}" class="d-flex" style="width: 100%;">
+              <tr id="${obj.id}" class="d-flex" style="width: 100%;">
               <th style="width: 20%;" scope="row">${obj.day}</th>
               <td style="width: 30%;">${obj.workout}</td>
               <td style="width: 30%;">${obj.time}</td>
@@ -48,30 +58,101 @@ let createTasks = () => {
 
 let deletePost = (e) => {
   e.parentElement.parentElement.parentElement.parentElement.remove();
+  
   data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
+
+/*   let workOutList = JSON.parse(localStorage.getItem("data"));
+  for(let i = 0; i < workOutList.length; i++){
+    if(workOutList[i].id === itemID){
+      workOutList.splice(i,1);
+    }
+  } */
+
   localStorage.setItem('data', JSON.stringify(data));
-  //console.log(e.parentElement.parentElement.parentElement.parentElement.id); 
-  //e.parentElement.parentElement.parentElement.parentElement.remove();
+  getworkOutLists(); 
 };
 
 
 
 let editPost = (e) => {
+  document.getElementById('submit').style.display = "none";
+  document.getElementById('editButton').style.display = "";
+  document.getElementById('formLabel').textContent = "Edit Your Workout";
+
+
   let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
+  let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
+
   day.value  = selectedWorkout.children[0].innerHTML;
   workout.value = selectedWorkout.children[1].innerHTML;
   time.value = selectedWorkout.children[2].innerHTML;
-  submit.innerHTML = "Update Now";
-  submit.className = "btn bg-warning";
 
-  submit.addEventListener('click', (e) =>{
-    confirm("Do you Want to Update?");
-   
-  });
-  selectedWorkout.remove();
-  data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
-  localStorage.getItem('data', JSON.stringify(data[e.parentElement.parentElement.parentElement.parentElement.id])); 
+  let item = JSON.parse(localStorage.getItem("data")) || [];
+
+
+
+
+        document.getElementById("editButton").addEventListener("click", function () {
+          //e.preventDefault();
+          acceptData();
+
+          let workOutList = JSON.parse(localStorage.getItem("data"));
+          for(let i = 0; i < workOutList.length; i++){
+            if(workOutList[i].id === itemID){
+              workOutList.splice(i,1);
+            }
+          }
+      
+          localStorage.setItem("data", JSON.stringify(workOutList));
+        
+          resetNewForm();
+          resetForm();
+          //document.getElementById("editButton").style.display = "none";
+
+        });
+
 };
+
+
+function resetNewForm() {
+  getworkOutLists(); 
+  
+  document.getElementById("formLabel").textContent = "New Product Form";
+  document.getElementById('editButton').style.display = "none";
+  document.getElementById('submit').style.display = "";
+  location.reload();
+}
+
+
+
+function getworkOutLists() {
+    
+    let workOutList = JSON.parse(localStorage.getItem("data"));
+    //Display result
+    for (let i = 0; i < workOutList.length; i++){
+/*       let id = workOutList[i].id;
+      let name = workOutList[i].name;
+      let category = workOutList[i].category;
+      let description = workOutList[i].description;
+ */
+      mon.innerHTML = "";
+      workOutList.map((obj, i) => {
+      return (mon.innerHTML += `
+        <tr id="${obj.id}" class="d-flex" style="width: 100%;">
+        <th style="width: 20%;" scope="row">${obj.day}</th>
+        <td style="width: 30%;">${obj.workout}</td>
+        <td style="width: 30%;">${obj.time}</td>
+        <td>
+        <span class="options">
+          <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
+          <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
+        </span>
+        </td>
+      </tr>`)
+    });
+  }
+};
+
 
 
   let resetForm = () => {
@@ -89,4 +170,3 @@ let editPost = (e) => {
 
 
 
-  
