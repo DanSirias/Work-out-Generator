@@ -9,7 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap-utilities.min.css" integrity="sha512-kRvJclW5GazdbAJPE9vvs560XNBwTBGLg4RVHZALXHFnAWQeRbQ/jGcGDHcQXiiqRld4wEFs6Kpoa6Tm/wCrtg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/styles/styles.css">
-    
+
+<style>
+  .hide {
+  background-color: black !important;
+  color: white; 
+}
+</style>    
 </head>
 <body>
   <header>
@@ -26,11 +32,12 @@
   <div class="row g-5">
     <div class="col-lg-8 col-xl-7 col-xxl-5 pt-5">
       <div class="card p-5">
+        <div id="error"></div>
       <h4 id="formLabel" class="mb-3">Build Your Workout</h4>
         <form id="workOutForm" class="needs-validation" novalidate="">
           <div class="input-group mb-3">
             <!-- Dropdown for days -->
-            <label class="input-group-text" for="DaysOfWeek">Day</label>
+            <label class="input-group-text" for="DaysOfWeek"><i class="fa fa-calendar" style="color: grey;" aria-hidden="true"></i></label>
             <select class="form-select" id="DaysOfWeek">
               <option selected>Choose day of workout...</option>
               <option value="Monday">Monday</option>
@@ -43,9 +50,14 @@
               <div class="invalid-feedback">Invalid Day</div>
             </select>
           </div>
+            <!-- Input for Workout Title -->
+            <div class="mb-3">
+              <label for="workoutTitle" class="form-label"><i class="fa fa-pen" style="color: grey;" aria-hidden="true"></i> Workout Title</label>
+              <input class="form-control" id="workoutTitle"></input>
+            </div>
             <!-- Input for Workout description -->
             <div class="mb-3">
-              <label for="workoutType" class="form-label">Workout Description</label>
+              <label for="workoutType" class="form-label"><i class="fa fa-sticky-note" aria-hidden="true" style="color: grey;"></i> Workout Description</label>
               <textarea class="form-control" id="workoutType" rows="3"></textarea>
             </div>
             <!-- Input for Date and Time -->
@@ -59,8 +71,12 @@
             </div>
         </form> 
 
-        </div>
- 
+      </div>
+      <div class="row">
+          <div class="col-md-12 text-center">
+            <img src="/images/rocky.svg" class="w-50 p-3" alt="" srcset="">
+          </div>
+      </div>
 
     </div>
     
@@ -73,8 +89,11 @@
           <div class="card-header">
           Monday
           </div>
-          <div class="card-body">
-            <table class="table table-striped">
+          <div class="card-body">              
+            <table class="table table-striped table-hover">
+              <span id="monNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+              <span class="visually-hidden">Workout Planned</span>
+              </span>
               <tbody id="mon" class="DayList" style="width: 100%;">
 
 
@@ -87,8 +106,11 @@
           <div class="card-header">
             Tuesday
           </div>
-          <div class="card-body">
-            <table class="table table-striped">
+          <div class="card-body">              
+            <table class="table table-striped table-hover">
+                <span id="tuesNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                </span>
               <tbody id="tues" class="DayList" style="width: 100%;">
 
 
@@ -101,8 +123,11 @@
           <div class="card-header">
             Wednesday
           </div>
-          <div class="card-body">
-            <table class="table table-striped">
+          <div class="card-body">              
+            <table class="table table-striped table-hover">
+              <span id="wedNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                  </span>
               <tbody id="wed" class="DayList" style="width: 100%;">
 
 
@@ -116,7 +141,10 @@
             Thursday
           </div>
           <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
+              <span id="thursNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                </span>
               <tbody id="thurs" class="DayList" style="width: 100%;">
 
 
@@ -131,10 +159,15 @@
             Friday
           </div>
           <div class="card-body">
-            <tbody id="fri" style="width: 100%;">
+            <table class="table table-striped table-hover">
+              <span id="friNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                </span>
+              <tbody id="fri" style="width: 100%;">
 
 
-            </tbody>
+              </tbody>
+          </table>
           </div>
         </div>
   
@@ -143,10 +176,15 @@
             Saturday
           </div>
           <div class="card-body">
+            <table class="table table-striped table-hover">
+              <span id="satNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                </span>
             <tbody id="sat" style="width: 100%;">
 
 
             </tbody>
+            </table>
           </div>
         </div>
   
@@ -155,10 +193,15 @@
             Sunday
           </div>
           <div class="card-body">
+            <table class="table table-striped table-hover">
+              <span id="sunNum" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <span class="visually-hidden">Workout Planned</span>
+                </span>
             <tbody id="sun" style="width: 100%;">
 
 
             </tbody>
+          </table>
           </div>
         </div>
 

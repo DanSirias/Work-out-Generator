@@ -1,11 +1,11 @@
 'use strict';
-
 const day = document.querySelector('#DaysOfWeek');
 const workout = document.querySelector('#workoutType');
+const workoutTitle = document.querySelector('#workoutTitle');
 const time = document.querySelector('#timeStart');
 const submit = document.querySelector('#submit');
 const reset = document.querySelector('#reset');
-const deleteItem = document.querySelectorAll('.btn-delete'); //arr for all del btns
+const deleteItem = document.querySelectorAll('.btn-delete'); //arr for all
 const mon = document.getElementById('mon');
 const tues = document.querySelector('#tues');
 const wed = document.querySelector('#wed');
@@ -25,327 +25,236 @@ reset.addEventListener('click', (e) => {
 });
 
 document.getElementById('editButton').style.display = "none";
-let data = [{}];
-let dayDiv; 
+let data = [{}];	
+let m = [{}],
+			t = [{}],
+			w = [{}],
+			th = [{}],
+			f = [{}],
+			s = [{}],
+			su = [{}]
+let dayDiv;
 
 //Generate ID for Items
 let randomID = () => {
 	return Math.floor((1 + Math.random()) * 0x10000)
-		.toString(16)
-		.substring(1);
+					.toString(16)
+					.substring(1);
 };
 
 
 let acceptData = () => {
-	try {
-		data.push({
-			id: randomID(),
-			day: day.options[day.selectedIndex].textContent,
-			workout: workout.value,
-			time: time.value,
-		});
-
-	 localStorage.setItem("data", JSON.stringify(data)); 
-	 orgDay();
-
-	} catch (error) {
-		alert(error);
-	}
-
-
-
-	// localStorage.setItem("data", JSON.stringify(data)); 
-	// createTasks();
-	
-/* if(day.options[day.selectedIndex].textContent == "Monday"){
-		alert("Its Monday"); 
-		localStorage.setItem("data", JSON.stringify(data)); 	
-		createTasks(mon);
-
-	}else if(day.options[day.selectedIndex].textContent == "Tuesday"){
-		alert("Its Tuesday"); 
-		localStorage.setItem("data", JSON.stringify(data)); 	
-		createTasks(tues);
-	}else{
-		return true; 
-	} */
-};
-
-let orgDay = () =>{
 try {
-	// let theDay = data.map((item) => item.day);
-	// console.log(...theDay);
-	//let dayDiv; 
-	
-		if(day.options[day.selectedIndex].textContent == "Monday") {
-			alert("Its Monday"); 
-			createTasks(mon);
-		}else if(day.options[day.selectedIndex].textContent == "Tuesday"){
-			alert("Its Tuesday"); 
-			createTasks(tues); 
-		}else {
-			alert('Select a Day');
-			return false;
-		}
+				data.push({
+								id: randomID(),
+								day: day.options[day.selectedIndex].textContent,
+								workoutTitle: workoutTitle.value,
+								workout: workout.value,
+								time: time.value,
+				});
+
+	localStorage.setItem("data", JSON.stringify(data));
+	location.reload();
 } catch (error) {
-	console.log(error);
+				alert(error);
 }
 
-}; 
-
-
-let createTasks = (dayDiv) => {
-'use strict';
-console.log("The parameter" + " " + dayDiv);
-	//let myDay = dayDiv; 
-    //let selectedDay = day.options[day.selectedIndex].textContent;
-		//store the key & value items in localStorage
-		//document.querySelector('#tues')
-	data.map((obj) => {
-		return (dayDiv.innerHTML += `
-      <tr id="${obj.id}" class="d-flex" style="width: 100%;">
-      <th style="width: 20%;" scope="row">${obj.day}</th>
-      <td style="width: 30%;">${obj.workout}</td>
-      <td style="width: 30%;">${obj.time}</td>
-        <td>
-          <span class="options">
-            <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
-            <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
-          </span>
-        </td>
-      </tr>`);
-	});
-  
-
-/* 	Object.keys(data).forEach(function(key) {
-
-		console.log(key, data[day]);
-	
-	});
-
-	let theDay = data.map((item) => item.day);
-	console.log("Your Info Below");
-	console.log(theDay); */
-	//let dayDiv = day; 
-	newLoadItems();
-	location.reload();
 };
-
-let deletePost = (e) => {
-	e.parentElement.parentElement.parentElement.parentElement.remove();
-	data.splice(e.parentElement.parentElement.parentElement.parentElement.id, 1);
-	localStorage.setItem('data', JSON.stringify(data));
-	getWorkOutLists();
-};
-
-
-
-let editPost = (e) => {
-    document.getElementById('submit').style.display = "none";
-    document.getElementById('editButton').style.display = "";
-    document.getElementById('formLabel').textContent = "Edit Your Workout";
-
-    let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
-    let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
-
-    day.value = selectedWorkout.children[0].innerHTML;
-    workout.value = selectedWorkout.children[1].innerHTML;
-    time.value = selectedWorkout.children[2].innerHTML;
-
-	  document.getElementById("editButton").addEventListener("click", function() {
-        //e.preventDefault();
-        acceptData();
-        let workOutList = JSON.parse(localStorage.getItem("data"));
-        
-        for (let i = 0; i < workOutList.length; i++) {
-          if (workOutList[i].id === itemID) {
-            workOutList.splice(i, 1);
-          }
-        }
-
-        localStorage.setItem("data", JSON.stringify(workOutList));
-        resetNewForm();
-        resetForm();
-	  });
-};
-
-
-let resetNewForm = () => {
-	document.getElementById("formLabel").textContent = "New Product Form";
-	document.getElementById('editButton').style.display = "none";
-	document.getElementById('submit').style.display = "";
-	newLoadItems();
-	location.reload();
-}
-
-/* let getWorkOutLists = () => {
-	let workOutList = JSON.parse(localStorage.getItem("data"));
-	//Display result
-	for (let i = 0; i < workOutList.length; i++) {
-		mon.innerHTML = "";
-		workOutList.map((obj) => {
-			return (mon.innerHTML += `
-        <tr id="${obj.id}" class="d-flex" style="width: 100%;">
-        <th style="width: 20%;" scope="row">${obj.day}</th>
-        <td style="width: 30%;">${obj.workout}</td>
-        <td style="width: 30%;">${obj.time}</td>
-        <td>
-        <span class="options">
-          <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
-          <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
-        </span>
-        </td>
-      </tr>`)
-		});
-	}
-};
- */
-let resetForm = () => {
-	day.value = "";
-	workout.value = "";
-	time.value = "";
-};
-
-
-
-
 
 //New Window Load
-let workOutList = JSON.parse(localStorage.getItem("data"));	
-	let m = [],
-			t = [],
-			w = [],
-			th = [],
-			f = [],
-			s = [],
-			su = []
-	let dayCards = [mon, tues];
-
+//let workOutList = localStorage.getItem("data", JSON.stringify(data));     
 function newLoadItems (){
+  try {
 
-	try {
-	for (var i = 0; i < workOutList.length; ++i) {
-			if (workOutList[i].day == "Monday") {
-					m.push([workOutList[i]]);
-					orgItems(mon,m);
-			} else if (workOutList[i].day == "Tuesday") {
-				  t.push([workOutList[i]]);
-					orgItems(tues,t);
-			}
-	};
-	console.log("This is M"+ " " + JSON.stringify(m));
- return true;
+  for (var i = 0; i < data.length; ++i) {
+      if (data[i].day == "Monday") {
+          m.push([data[i]]);
+          orgItems(mon,m);
+          let icon = document.getElementById('monNum'); 
+          if(m.length > 0){
+						icon.textContent = m.length;
+						icon.classList.add("bg-primary");
+          }else{
+						break;
+          }
+      } 
+      else if (data[i].day == "Tuesday") {
+          t.push([data[i]]);
+          orgItems(tues,t);
+					let icon = document.getElementById('tuesNum'); 
+					if(t.length > 0){
+						icon.textContent = t.length;
+						icon.classList.add("bg-primary");
+          }else{
+          	break;
+          }
+      }
+      else if (data[i].day == "Wednesday") {
+          w.push([data[i]]);
+          orgItems(wed,w);
+					let icon = document.getElementById('wedNum'); 
+					if(w.length > 0){
+						icon.textContent = w.length;
+						icon.classList.add("bg-primary");
+          }else{
+						break; 
+          }
 
+      }						
+      else if (data[i].day == "Thursday") {
+        th.push([data[i]]);
+        orgItems(thurs,th);
+				let icon = document.getElementById('thursNum'); 
+				if(th.length > 0){
+					icon.textContent = th.length; 
+				}else{
+					icon.classList.add("hide");
+				}
 
+      }						
+      else if (data[i].day == "Friday") {
+        f.push([data[i]]);
+        orgItems(fri,f);
+				let icon = document.getElementById('friNum'); 
+				if(f.length > 0){
+					icon.textContent = f.length; 
+				}else{
+					icon.classList.add("hide");
+				}
 
-	// let dayArr = [m,t];
-	// console.log(dayArr);
+      }
+      else if (data[i].day == "Saturday") {
+        s.push([data[i]]);
+        orgItems(sat,s);
+				let icon = document.getElementById('satNum'); 
+				if(s.length > 0){
+					icon.classList.remove("bg-success");
+					icon.textContent = s.length; 
+				}else{
+					//icon.classList.add("hide");
+				}
 
-	// var myObject = { name: 'myObject' };
-	// dayArr.forEach(function(item){ 
-	// 	console.log(item);                     // 1, 2
-	// 	console.log(this === myObject, this);  // true  {name: "myObject"}
-	// }, myObject)
-
-//console.log(JSON.stringify(m));				
-//console.log(JSON.stringify(t));
-
-
-	} catch (error) {
-		console.log(error);
-	}
-
-
-
-
-// 	//Display result
-// 	workOutList.forEach(callbackFn, thisArg)
-// 		data.forEach((element, i) => {
-// 		console.log("Data is working");
-// 		console.log(workOutList[i].day);
-// 				try {
-// 					// let theDay = data.map((item) => item.day);
-// 					// console.log(...theDay);
-// 					//let dayDiv; 
-					
-// 						if(workOutList[i].day == "Monday") {
-// 							orgItems(mon);
-// 						}
-// 						else if(workOutList[i].day == "Tuesday"){
-// 							orgItems(tues); 
-// 						}
-// 						else {
-// 							return false;
-// 						}
-// 				} catch (error) {
-// 					console.log(error);
-// 				}
-		
-
-// 	});
-// }
-
-
+      }
+      else if (data[i].day == "Sunday") {
+        su.push([data[i]]);
+        orgItems(sun,su);
+				let icon = document.getElementById('sunNum'); 
+				if(su.length > 0){
+					icon.textContent = su.length; 
+				}else{
+					icon.classList.add("hide");
+				}
+      }
+      else {
+        alert('Select Day'); 
+      }
+  };
+  console.log("This is M"+ " " + m);
+  } catch (error) {
+          console.log(error);
+  }
 };
 
 //New Window Load With Arrays
 function orgItems (d,list) {
-
-	try {
-		d.innerHTML = "";
-	// 	let id; 
-	// 	let day; 
-	// 	let workout; 
-	let listArr =  m;
-
-// for (let i = 1; i < list.length; i++){
-// 	console.log(list.length);
-// 	let html = `
-// 	<tr id="${list}" class="d-flex" style="width: 100%;">
-// 	<th style="width: 20%;" scope="row">${list.day}</th>
-// 	<td style="width: 30%;">${list.workout}</td>
-// 	<td style="width: 30%;">${list.time}</td>
-// 		<td>
-// 			<span class="options">
-// 				<a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
-// 				<a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
-// 			</span>
-// 		</td>
-// 	</tr>`;
-
-// 	return d.innerHTML += html.innerHTML;
-// }
-
-	list.map((obj, i) => {
-	console.log(m);
-	let html = `
-      <tr id="${obj.id}" class="d-flex" style="width: 100%;">
-      <th style="width: 20%;" scope="row">${obj.i}</th>
-      <td style="width: 30%;">${obj.workout}</td>
-      <td style="width: 30%;">${obj.time}</td>
+'use strict';
+try {
+	console.log(m.length); 
+	d.innerHTML = "";
+    list.map(function(obj) {
+		//console.log(list);
+    return d.innerHTML +=  (`<tr id="${obj[0].id}" class="d-flex" style="width: 100%;">
+      <th style="width: 20%;" scope="row">${obj[0].workoutTitle}</th>
+      <td style="width: 30%;">${obj[0].workout}</td>
+      <td style="width: 30%;">${obj[0].time}</td>
         <td>
           <span class="options">
-            <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: grey;"></i></a>
-            <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: grey;"></i></a>
+            <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: orange;"></i></a>
+            <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: red;"></i></a>
           </span>
         </td>
-      </tr>`;
-		return d.innerHTML += html;
+      </tr>`);
+   
 	});
+//newLoadItems ();
+//location.reload();
+ //resetForm();
+ resetForm();
+} catch (error) {
+    document.getElementById('error').innerHTML = error;
+    console.log(error);
+        }
+};
 
-	resetForm();
-
-	} catch (error) {
-		console.log(error);
+let deletePost = (e) => {
+	e.parentElement.parentElement.parentElement.parentElement.remove();
+	let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
+	let workOutList = JSON.parse(localStorage.getItem("data"));
+	for (let i = 0; i < workOutList.length; i++) {
+		if (workOutList[i].id === itemID) {
+			workOutList.splice(i, 1);
+		}
 	}
+	localStorage.setItem("data", JSON.stringify(workOutList));
+	setTimeout(function (){		
+		location.reload();
+	}, 200);
+};
+
+let editPost = (e) => {
+	document.getElementById('submit').style.display = "none";
+	document.getElementById('editButton').style.display = "";
+	document.getElementById('formLabel').textContent = "Edit Your Workout";
+
+	let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
+	let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
+	day.value = selectedWorkout.children[0].innerHTML;
+	workout.value = selectedWorkout.children[1].innerHTML;
+	time.value = selectedWorkout.children[2].innerHTML;
+
+	document.getElementById("editButton").addEventListener("click", function() {
+		//e.preventDefault();
+		acceptData();
+		let workOutList = JSON.parse(localStorage.getItem("data"));
+		for (let i = 0; i < workOutList.length; i++) {
+			if (workOutList[i].id === itemID) {
+				workOutList.splice(i, 1);
+			}
+		}
+		localStorage.setItem("data", JSON.stringify(workOutList));
+		setTimeout(function (){		
+			location.reload();
+		}, 200);
+	});
+	
 
 };
-	
+
+let resetNewForm = () => {
+        document.getElementById("formLabel").textContent = "New Product Form";
+        document.getElementById('editButton').style.display = "none";
+        document.getElementById('submit').style.display = "";
+        newLoadItems();
+
+}
+
+let resetForm = () => {
+        day.value = "";
+        workout.value = "";
+        time.value = "";
+};
+
 (() => {
-	data = JSON.parse(localStorage.getItem("data")) || [];
-	//console.log(data);
-	//console.log(Object.keys(data));
-	newLoadItems ();
-	//createTasks ();
+        data = JSON.parse(localStorage.getItem("data")) || [];
+        m = JSON.parse(localStorage.getItem("m")) || [];
+        t = JSON.parse(localStorage.getItem("t")) || [];
+        w = JSON.parse(localStorage.getItem("w")) || [];
+				th = JSON.parse(localStorage.getItem("th")) || [];
+				f = JSON.parse(localStorage.getItem("f")) || [];
+				s = JSON.parse(localStorage.getItem("s")) || [];
+				su = JSON.parse(localStorage.getItem("su")) || [];
+				console.log(data);
+        newLoadItems ();
 })();
+
 
