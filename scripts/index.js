@@ -6,17 +6,19 @@ const time = document.querySelector('#timeStart');
 const submit = document.querySelector('#submit');
 const reset = document.querySelector('#reset');
 const deleteItem = document.querySelectorAll('.btn-delete'); //arr for all
-const mon = document.getElementById('mon');
-const tues = document.querySelector('#tues');
-const wed = document.querySelector('#wed');
-const thurs = document.querySelector('#thurs');
-const fri = document.querySelector('#fri');
-const sat = document.querySelector('#sat');
-const sun = document.querySelector('#sun');
+const mon = document.querySelector('#Monday');
+const tues = document.querySelector('#Tuesday');
+const wed = document.querySelector('#Wednesday');
+const thurs = document.querySelector('#Thursday');
+const fri = document.querySelector('#Friday');
+const sat = document.querySelector('#Saturday');
+const sun = document.querySelector('#Sunday');
+
+
 
 submit.addEventListener('click', (e) => {
 	e.preventDefault();
-	acceptData();
+	formInput();
 });
 
 reset.addEventListener('click', (e) => {
@@ -43,7 +45,7 @@ let randomID = () => {
 };
 
 
-let acceptData = () => {
+let formInput = () => {
 try {
 				data.push({
 								id: randomID(),
@@ -63,7 +65,7 @@ try {
 
 //New Window Load
 //let workOutList = localStorage.getItem("data", JSON.stringify(data));     
-function newLoadItems (){
+let newLoadItems = () =>{
   try {
 
   for (var i = 0; i < data.length; ++i) {
@@ -107,6 +109,7 @@ function newLoadItems (){
 				let icon = document.getElementById('thursNum'); 
 				if(th.length > 0){
 					icon.textContent = th.length; 
+					icon.classList.add("bg-primary");
 				}else{
 					icon.classList.add("hide");
 				}
@@ -118,6 +121,7 @@ function newLoadItems (){
 				let icon = document.getElementById('friNum'); 
 				if(f.length > 0){
 					icon.textContent = f.length; 
+					icon.classList.add("bg-primary");
 				}else{
 					icon.classList.add("hide");
 				}
@@ -128,10 +132,10 @@ function newLoadItems (){
         orgItems(sat,s);
 				let icon = document.getElementById('satNum'); 
 				if(s.length > 0){
-					icon.classList.remove("bg-success");
 					icon.textContent = s.length; 
+					icon.classList.add("bg-primary");
 				}else{
-					//icon.classList.add("hide");
+					icon.classList.add("hide");
 				}
 
       }
@@ -141,6 +145,7 @@ function newLoadItems (){
 				let icon = document.getElementById('sunNum'); 
 				if(su.length > 0){
 					icon.textContent = su.length; 
+					icon.classList.add("bg-primary");
 				}else{
 					icon.classList.add("hide");
 				}
@@ -156,7 +161,7 @@ function newLoadItems (){
 };
 
 //New Window Load With Arrays
-function orgItems (d,list) {
+let orgItems = (d,list) => {
 'use strict';
 try {
 	console.log(m.length); 
@@ -169,8 +174,8 @@ try {
       <td style="width: 30%;">${obj[0].time}</td>
         <td>
           <span class="options">
-            <a class="btn" type="button" href="#"><i onClick="editPost(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: orange;"></i></a>
-            <a class="btn" type="button" href="#"><i onClick="deletePost(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: red;"></i></a>
+            <a class="btn" type="button" href="#"><i onClick="editWorkout(this);" title="Edit Item" class="fa fa-edit pe-2" style="color: orange;"></i></a>
+            <a class="btn" type="button" href="#"><i onClick="deleteWorkout(this);" type="button" title="Delete Item" class="fa fa-trash-alt" style="color: red;"></i></a>
           </span>
         </td>
       </tr>`);
@@ -186,13 +191,13 @@ try {
         }
 };
 
-let deletePost = (e) => {
+let deleteWorkout = (e) => {
 	e.parentElement.parentElement.parentElement.parentElement.remove();
 	let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
 	let workOutList = JSON.parse(localStorage.getItem("data"));
 	for (let i = 0; i < workOutList.length; i++) {
 		if (workOutList[i].id === itemID) {
-			workOutList.splice(i, 1);
+			workOutList.splice(i, 1); //remove the item selected from localStorage
 		}
 	}
 	localStorage.setItem("data", JSON.stringify(workOutList));
@@ -201,20 +206,26 @@ let deletePost = (e) => {
 	}, 200);
 };
 
-let editPost = (e) => {
+let editWorkout = (e) => {
+
 	document.getElementById('submit').style.display = "none";
 	document.getElementById('editButton').style.display = "";
 	document.getElementById('formLabel').textContent = "Edit Your Workout";
 
+
+
 	let selectedWorkout = e.parentElement.parentElement.parentElement.parentElement;
+	let selectedWorkoutDay = e.parentElement.parentElement.parentElement.parentElement.parentElement.id;
 	let itemID = e.parentElement.parentElement.parentElement.parentElement.id;
-	day.value = selectedWorkout.children[0].innerHTML;
+
+	day.value = selectedWorkoutDay;
+	workoutTitle.value = selectedWorkout.children[0].innerHTML;
 	workout.value = selectedWorkout.children[1].innerHTML;
 	time.value = selectedWorkout.children[2].innerHTML;
 
 	document.getElementById("editButton").addEventListener("click", function() {
 		//e.preventDefault();
-		acceptData();
+		formInput();
 		let workOutList = JSON.parse(localStorage.getItem("data"));
 		for (let i = 0; i < workOutList.length; i++) {
 			if (workOutList[i].id === itemID) {
@@ -240,6 +251,7 @@ let resetNewForm = () => {
 
 let resetForm = () => {
         day.value = "";
+				workoutTitle.value = "";
         workout.value = "";
         time.value = "";
 };
@@ -254,6 +266,7 @@ let resetForm = () => {
 				s = JSON.parse(localStorage.getItem("s")) || [];
 				su = JSON.parse(localStorage.getItem("su")) || [];
 				console.log(data);
+				//myFunction();
         newLoadItems ();
 })();
 
